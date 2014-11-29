@@ -106,7 +106,7 @@ public class ScreenHome : MonoBehaviour
         GUI.DrawTexture(rectRegisterButton, registerButton);
         if (GUI.Button(rectRegisterButton, "", "Label"))
         {
-
+            Application.LoadLevel("register");
         }
     }
 
