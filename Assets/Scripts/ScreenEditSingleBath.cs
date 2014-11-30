@@ -5,6 +5,10 @@ public class ScreenEditSingleBath : MonoBehaviour
 {
     #region Class Member Variables
 
+    public GameObject TopView;
+    public GameObject SideView;
+    public GameObject InnerCamera;
+
     private const float DIVISOR = 16;
 
     private float unit_w;
@@ -13,8 +17,9 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Texture2D stripColor;
     private Texture2D logoBMS;
     private Texture2D signOutButton;
-    private Texture2D deleteButton;
     private Texture2D backButton;
+    private Texture2D topViewButton;
+    private Texture2D sideViewButton;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -22,14 +27,13 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Rect rectLayoutLabel;
     private Rect rectItemLabel;
     private Rect rectBackButton;
+    private Rect rectSideView;
+    private Rect rectTopView;
 
     private Vector2 favoriteScrollPos = Vector2.zero;
 
     private GUIStyle labelStyle;
     private GUIStyle highlightStyle;
-
-    private string username;
-    private string email;
 
     #endregion
 
@@ -43,8 +47,9 @@ public class ScreenEditSingleBath : MonoBehaviour
 
         logoBMS = Resources.Load<Texture2D>("Textures/LogoBMS");
         signOutButton = Resources.Load<Texture2D>("Textures/SignOutTexture");
-        deleteButton = Resources.Load<Texture2D>("Textures/DeleteTexture");
         backButton = Resources.Load<Texture2D>("Textures/BackTexture");
+        topViewButton = Resources.Load<Texture2D>("Textures/TopViewTexture");
+        sideViewButton = Resources.Load<Texture2D>("Textures/SideViewTexture");
 
         highlightStyle = new GUIStyle();
         highlightStyle.fontSize = 32;
@@ -54,9 +59,6 @@ public class ScreenEditSingleBath : MonoBehaviour
         labelStyle = new GUIStyle();
         labelStyle.fontSize = 25;
         labelStyle.normal.textColor = Color.black;
-
-        username = SceneController.Instance.Username;
-        email = SceneController.Instance.Email;
     }
 
     private void Update()
@@ -67,6 +69,8 @@ public class ScreenEditSingleBath : MonoBehaviour
         rectBMSLogo = new Rect(unit_w, unit_h * 0.15f, unit_w * 5, unit_h * 1.7f);
         rectSignOut = new Rect(Screen.width - unit_w * 2, unit_h * 0.5f, unit_w * 1.5f, unit_h);
         rectBackButton = new Rect(Screen.width - unit_w * 4, unit_h * 0.5f, unit_w * 1.5f, unit_h);
+        rectTopView = new Rect(unit_w, Screen.height - unit_h * 1.5f, unit_w * 1.5f, unit_h);
+        rectSideView = new Rect(unit_w * 3, Screen.height - unit_h * 1.5f, unit_w * 1.5f, unit_h);
 
         Vector2 labelSize = highlightStyle.CalcSize(new GUIContent("Single Bath Layout"));
         rectLayoutLabel = new Rect(unit_w, unit_h * 2.5f, labelSize.x, labelSize.y);
@@ -92,6 +96,20 @@ public class ScreenEditSingleBath : MonoBehaviour
             Application.LoadLevel("signon");
         }
 
+        GUI.DrawTexture(rectTopView, topViewButton);
+        if (GUI.Button(rectTopView, "", "Label"))
+        {
+            InnerCamera.transform.position = TopView.transform.position;
+            InnerCamera.transform.rotation = TopView.transform.rotation;
+        }
+
+        GUI.DrawTexture(rectSideView, sideViewButton);
+        if (GUI.Button(rectSideView, "", "Label"))
+        {
+            InnerCamera.transform.position = SideView.transform.position;
+            InnerCamera.transform.rotation = SideView.transform.rotation;
+        }
+
         GUI.Label(rectLayoutLabel, "Single Bath Layout", highlightStyle);
         GUI.Label(rectItemLabel, "Layout Items", highlightStyle);
 
@@ -105,11 +123,6 @@ public class ScreenEditSingleBath : MonoBehaviour
         favoriteScrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
         foreach (var item in SceneController.Instance.ItemList)
         {
-            Rect rectPurchase = new Rect(0, 0, 0, 0);
-            Rect rectDelete = new Rect(0, 0, 0, 0);
-            Rect rectFacebook = new Rect(0, 0, 0, 0);
-            Rect rectTwitter = new Rect(0, 0, 0, 0);
-
             Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
             GUI.Label(new Rect(0, 0, size.x, size.y), item.Key, labelStyle);
             GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.Logo);
