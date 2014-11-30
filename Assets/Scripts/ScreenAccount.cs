@@ -161,6 +161,7 @@ public class ScreenAccount : MonoBehaviour
 		GUI.DrawTexture (rectFavorites, background);
 
 		favoriteScrollPos = GUI.BeginScrollView(rectFavorites, favoriteScrollPos, rectFavoritesInner);
+
         foreach (var fav in SceneController.Instance.Favorites)
         {
             Rect rectPurchase = new Rect(0, 0, 0, 0);
@@ -168,10 +169,9 @@ public class ScreenAccount : MonoBehaviour
             Rect rectFacebook = new Rect(0, 0, 0, 0);
             Rect rectTwitter = new Rect(0, 0, 0, 0);
 
-            Vector2 size = labelStyle.CalcSize(new GUIContent(fav));
-            GUI.Label(new Rect(0, 0, size.x, size.y), fav, labelStyle);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), SceneController.Instance.ItemList[fav].Logo);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), SceneController.Instance.ItemList[fav].EfficiencyImage);
+			GUI.Label(new Rect(rectFavoritesInner.x, currentYPos, favoriteWidth, favoriteHeight), fav, labelStyle);
+			GUI.DrawTexture(new Rect(0,0,0,0), SceneController.Instance.ItemList[fav].EfficiencyImage);
+			GUI.DrawTexture(new Rect(0,0,0,0), SceneController.Instance.ItemList[fav].Logo);
 
             GUI.DrawTexture(rectPurchase, purchaseButton);
             if (GUI.Button(rectPurchase, "", "Label"))
@@ -196,6 +196,8 @@ public class ScreenAccount : MonoBehaviour
             {
                 Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
             }
+
+			currentYPos = currentYPos + favoriteHeight + favoriteHeight * yBufferMultiplier;
         }
         GUI.EndScrollView();
 
