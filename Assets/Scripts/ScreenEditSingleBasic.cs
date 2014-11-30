@@ -14,6 +14,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
     private float unit_w;
     private float unit_h;
 
+	private int greenScore;
+
     private Texture2D stripColor;
     private Texture2D logoBMS;
     private Texture2D signOutButton;
@@ -29,6 +31,7 @@ public class ScreenEditSingleBasic : MonoBehaviour
     private Rect rectSignOut;
     private Rect rectLayoutLabel;
     private Rect rectItemLabel;
+	private Rect rectGreenLabel;
     private Rect rectBackButton;
     private Rect rectSideView;
     private Rect rectTopView;
@@ -68,6 +71,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
         labelStyle = new GUIStyle();
         labelStyle.fontSize = 20;
         labelStyle.normal.textColor = Color.black;
+
+		greenScore = 0;
     }
 
     private void Update()
@@ -86,6 +91,9 @@ public class ScreenEditSingleBasic : MonoBehaviour
 
         labelSize = highlightStyle.CalcSize(new GUIContent("Layout Items"));
         rectItemLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
+
+		labelSize = highlightStyle.CalcSize (new GUIContent ("Green Score: XX"));
+		rectGreenLabel = new Rect (rectItemLabel.x - labelSize.x * 1.5f, unit_h * 2.5f, labelSize.x, labelSize.y);
     }
 
     private void OnGUI()
@@ -121,6 +129,7 @@ public class ScreenEditSingleBasic : MonoBehaviour
 
         GUI.Label(rectLayoutLabel, "Single Basic Layout", highlightStyle);
         GUI.Label(rectItemLabel, "Layout Items", highlightStyle);
+		GUI.Label(rectGreenLabel, "Green Score: " + greenScore, highlightStyle);
 
         DrawItems();
     }
@@ -160,6 +169,9 @@ public class ScreenEditSingleBasic : MonoBehaviour
             if (GUI.Button(rectAdd, "", "Label"))
             {
                 GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity) as GameObject;
+				if(item.Value.EfficiencyImage == Resources.Load<Texture2D>("Textures/efficient")) {
+					greenScore += 5;
+				} else greenScore -= 5;
             }
 
             GUI.DrawTexture(rectFavorite, favoriteButton);

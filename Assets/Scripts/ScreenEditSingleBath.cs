@@ -12,7 +12,9 @@ public class ScreenEditSingleBath : MonoBehaviour
     private const float DIVISOR = 16;
 
     private float unit_w;
-    private float unit_h;
+	private float unit_h;
+	
+	private int greenScore;
 
     private Texture2D stripColor;
     private Texture2D logoBMS;
@@ -28,7 +30,8 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Rect rectBMSLogo;
     private Rect rectSignOut;
     private Rect rectLayoutLabel;
-    private Rect rectItemLabel;
+	private Rect rectItemLabel;
+	private Rect rectGreenLabel;
     private Rect rectBackButton;
     private Rect rectSideView;
 	private Rect rectTopView;
@@ -67,7 +70,9 @@ public class ScreenEditSingleBath : MonoBehaviour
 
         labelStyle = new GUIStyle();
         labelStyle.fontSize = 20;
-        labelStyle.normal.textColor = Color.black;
+		labelStyle.normal.textColor = Color.black;
+		
+		greenScore = 0;
     }
 
     private void Update()
@@ -85,7 +90,10 @@ public class ScreenEditSingleBath : MonoBehaviour
         rectLayoutLabel = new Rect(unit_w, unit_h * 2.5f, labelSize.x, labelSize.y);
 
         labelSize = highlightStyle.CalcSize(new GUIContent("Layout Items"));
-        rectItemLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
+		rectItemLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
+		
+		labelSize = highlightStyle.CalcSize (new GUIContent ("Green Score: XX"));
+		rectGreenLabel = new Rect (rectItemLabel.x - labelSize.x * 1.5f, unit_h * 2.5f, labelSize.x, labelSize.y);
     }
 
     private void OnGUI()
@@ -120,7 +128,8 @@ public class ScreenEditSingleBath : MonoBehaviour
         }
 
         GUI.Label(rectLayoutLabel, "Single Bath Layout", highlightStyle);
-        GUI.Label(rectItemLabel, "Layout Items", highlightStyle);
+		GUI.Label(rectItemLabel, "Layout Items", highlightStyle);
+		GUI.Label(rectGreenLabel, "Green Score: " + greenScore, highlightStyle);
 
         DrawItems();
     }
@@ -160,6 +169,9 @@ public class ScreenEditSingleBath : MonoBehaviour
 			if (GUI.Button(rectAdd, "", "Label"))
 			{
 				GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity) as GameObject;
+				if(item.Value.EfficiencyImage == Resources.Load<Texture2D>("Textures/efficient")) {
+					greenScore += 5;
+				} else greenScore -= 5;
 			}
 			
 			GUI.DrawTexture(rectFavorite, favoriteButton);
