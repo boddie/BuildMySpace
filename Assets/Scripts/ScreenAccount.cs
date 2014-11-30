@@ -139,65 +139,94 @@ public class ScreenAccount : MonoBehaviour
     {
         Queue<string> removeQ = new Queue<string>();
 
-		float xBufferStatic = 2.0f;
-		float yBufferMultiplier = 0.05f;
+		// Dynamic buffers for spacing
+		float xBuffer = unit_w * 0.15f;
+		float yBuffer = unit_h * 0.15f;
 
+		// x,y coords for favorites container
 		float rectFavoritesXPos = rectFavoriteLabel.x;
 		float rectFavoritesYPos = rectFavoriteLabel.y + rectFavoriteLabel.height;
 
-		float rectFavoritesInnerXPos = rectFavoritesXPos + xBufferStatic;
-		float rectFavoritesInnerYPos = rectFavoritesYPos + rectFavoriteLabel.height * yBufferMultiplier;
+		// x,y coords for favorites inner scroll view
+		float rectFavoritesInnerXPos = rectFavoritesXPos + xBuffer * 2;
+		float rectFavoritesInnerYPos = rectFavoritesYPos + yBuffer;
 		
+		float currentXPos = rectFavoritesInnerXPos + xBuffer;
 		float currentYPos = rectFavoritesInnerYPos;
 
+		// Buffered height/width for favorite item
 		Vector2 favoriteStyle = labelStyle.CalcSize (new GUIContent (SceneController.Instance.Favorites [0]));
-		float favoriteHeight = favoriteStyle.y;
-		float favoriteWidth = favoriteStyle.x;
+		float favoriteHeight = favoriteStyle.y + yBuffer;
+		float favoriteWidth = favoriteStyle.x + (xBuffer * 2);
+		
+		float imageHeight = favoriteHeight - yBuffer;
+		float imageWidth = imageHeight;
+		
+		float logoHeight = favoriteHeight - yBuffer;
+		float logoWidth = logoHeight;
+
+		float buttonHeight = favoriteHeight - yBuffer;
+		float buttonWidth = buttonHeight;
 
 		int numFavorites = SceneController.Instance.Favorites.Count;
 
-		Rect rectFavoritesInner = new Rect (rectFavoritesInnerXPos, rectFavoritesInnerYPos, favoriteWidth + xBufferStatic, favoriteHeight * yBufferMultiplier + favoriteHeight * (numFavorites + 1));
-		Rect rectFavorites = new Rect (rectFavoritesXPos, rectFavoritesYPos, favoriteWidth + xBufferStatic * 2.0f, rectFavoritesInner.height + favoriteHeight * yBufferMultiplier);
+		Rect rectFavoritesInner = new Rect (rectFavoritesInnerXPos, rectFavoritesInnerYPos, (imageWidth + xBuffer + logoWidth + xBuffer + favoriteWidth + xBuffer + ((buttonWidth + xBuffer) * 2) + (buttonWidth * 2 + xBuffer) + (buttonWidth * 2.2f + xBuffer)), (favoriteHeight + yBuffer) * numFavorites);
+		Rect rectFavorites = new Rect (rectFavoritesXPos, rectFavoritesYPos, rectFavoritesInner.width, rectFavoritesInner.height + yBuffer);
 		GUI.DrawTexture (rectFavorites, background);
 
 		favoriteScrollPos = GUI.BeginScrollView(rectFavorites, favoriteScrollPos, rectFavoritesInner);
+		
+		Rect buttonRect = new Rect (0, 0, 0, 0);
 
         foreach (var fav in SceneController.Instance.Favorites)
         {
-            Rect rectPurchase = new Rect(0, 0, 0, 0);
-            Rect rectDelete = new Rect(0, 0, 0, 0);
-            Rect rectFacebook = new Rect(0, 0, 0, 0);
-            Rect rectTwitter = new Rect(0, 0, 0, 0);
+			Rect rectPurchase;
+			Rect rectDelete;
+			Rect rectFacebook;
+			Rect rectTwitter;
+	
+			GUI.DrawTexture(new Rect(currentXPos, currentYPos + yBuffer, logoWidth, logoHeight), SceneController.Instance.ItemList[fav].Logo);
+			currentXPos = currentXPos + logoWidth + xBuffer;
 
-			GUI.Label(new Rect(rectFavoritesInner.x, currentYPos, favoriteWidth, favoriteHeight), fav, labelStyle);
-			GUI.DrawTexture(new Rect(0,0,0,0), SceneController.Instance.ItemList[fav].EfficiencyImage);
-			GUI.DrawTexture(new Rect(0,0,0,0), SceneController.Instance.ItemList[fav].Logo);
+			GUI.DrawTexture(new Rect(currentXPos, currentYPos + yBuffer, imageWidth, imageHeight), SceneController.Instance.ItemList[fav].EfficiencyImage);
+			currentXPos = currentXPos + imageWidth + xBuffer;
 
+			GUI.Label(new Rect(currentXPos, currentYPos + yBuffer, favoriteWidth, favoriteHeight), fav, labelStyle);
+			currentXPos = currentXPos + favoriteWidth;
+
+			rectPurchase = new Rect(currentXPos, currentYPos + yBuffer, buttonWidth * 2.2f, buttonHeight);
             GUI.DrawTexture(rectPurchase, purchaseButton);
             if (GUI.Button(rectPurchase, "", "Label"))
             {
                 Application.ExternalEval("window.open('" + SceneController.Instance.ItemList[fav].PurchaseURL + "','_blank')");
             }
+			currentXPos = currentXPos + buttonWidth * 2.2f + xBuffer;
 
+			rectDelete = new Rect(currentXPos, currentYPos + yBuffer, buttonWidth * 2, buttonHeight);
             GUI.DrawTexture(rectDelete, deleteButton);
             if (GUI.Button(rectDelete, "", "Label"))
             {
                 removeQ.Enqueue(fav);
-            }
+			}
+			currentXPos = currentXPos + buttonWidth * 2 + xBuffer;
 
+			rectFacebook = new Rect(currentXPos, currentYPos + yBuffer, buttonWidth, buttonHeight);
             GUI.DrawTexture(rectFacebook, facebookButton);
             if (GUI.Button(rectFacebook, "", "Label"))
             {
                 Application.ExternalEval("window.open('https://www.facebook.com/','_blank')");
-            }
+			}
+			currentXPos = currentXPos + buttonWidth + xBuffer;	
 
+			rectTwitter = new Rect(currentXPos, currentYPos + yBuffer, buttonWidth, buttonHeight);
             GUI.DrawTexture(rectTwitter, twitterButton);
             if (GUI.Button(rectTwitter, "", "Label"))
             {
                 Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
-            }
+			}
 
-			currentYPos = currentYPos + favoriteHeight + favoriteHeight * yBufferMultiplier;
+			currentYPos = currentYPos + favoriteHeight + yBuffer;
+			currentXPos = rectFavoritesInnerXPos + xBuffer;
         }
         GUI.EndScrollView();
 
