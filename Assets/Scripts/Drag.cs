@@ -22,7 +22,7 @@ public class Drag : MonoBehaviour
             if (Physics.Raycast(vRay, out vHit, 1000))
             {
                 if(vHit.transform == this.transform)
-                    vHit.transform.Rotate(new Vector3(0, 1, 0), 90);
+                    vHit.transform.Rotate(new Vector3(0, 1, 0), 45);
             }
         }
     }
