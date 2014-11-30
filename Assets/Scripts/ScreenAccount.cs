@@ -21,6 +21,7 @@ public class ScreenAccount : MonoBehaviour
     private Texture2D doubleBasic;
     private Texture2D singleBath;
     private Texture2D editButton;
+    private Texture2D backButton;
 	private Texture2D background;
 
     private Rect rectStrip;
@@ -32,6 +33,7 @@ public class ScreenAccount : MonoBehaviour
     private Rect rectFavoriteLabel;
     private Rect rectNoFavsLabel;
     private Rect rectLayoutLabel;
+    private Rect rectBackButton;
 
     private Vector2 favoriteScrollPos = Vector2.zero;
 
@@ -61,6 +63,8 @@ public class ScreenAccount : MonoBehaviour
         doubleBasic = Resources.Load<Texture2D>("Textures/RoomDualBasicTexture");
         singleBath = Resources.Load<Texture2D>("Textures/RoomSingleBathTexture");
         editButton = Resources.Load<Texture2D>("Textures/EditTexture");
+        backButton = Resources.Load<Texture2D>("Textures/BackTexture");
+
 		background = new Texture2D (1, 1);
 		background.SetPixel (0, 0, Color.gray);
 		background.Apply ();
@@ -85,6 +89,7 @@ public class ScreenAccount : MonoBehaviour
         rectStrip = new Rect(0, 0, Screen.width, unit_h * 2);
         rectBMSLogo = new Rect(unit_w, unit_h * 0.15f, unit_w * 5, unit_h * 1.7f);
         rectSignOut = new Rect(Screen.width - unit_w * 2, unit_h * 0.5f, unit_w * 1.5f, unit_h);
+        rectBackButton = new Rect(Screen.width - unit_w * 4, unit_h * 0.5f, unit_w * 1.5f, unit_h);
 
         Vector2 labelSize = highlightStyle.CalcSize(new GUIContent("Account"));
         rectAccountLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
@@ -110,6 +115,11 @@ public class ScreenAccount : MonoBehaviour
         GUI.DrawTexture(rectStrip, stripColor);
         GUI.DrawTexture(rectBMSLogo, logoBMS);
         GUI.DrawTexture(rectSignOut, signOutButton);
+        GUI.DrawTexture(rectBackButton, backButton);
+        if (GUI.Button(rectBackButton, "", "Label"))
+        {
+            Application.LoadLevel(SceneController.Instance.BackStack.Pop());
+        }
 
         if (GUI.Button(rectSignOut, "", "Label"))
         {
@@ -248,6 +258,7 @@ public class ScreenAccount : MonoBehaviour
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
         {
+            SceneController.Instance.BackStack.Push("account");
             Application.LoadLevel("singleBasic");
         }
         Rect facebookRect = new Rect(unit_w * 5, unit_h * 5.5f, unit_w * 0.5f, unit_h);
@@ -271,6 +282,7 @@ public class ScreenAccount : MonoBehaviour
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
         {
+            SceneController.Instance.BackStack.Push("account");
             Application.LoadLevel("doubleBasic");
         }
         facebookRect = new Rect(unit_w * 5, unit_h * 9.5f, unit_w * 0.5f, unit_h);
@@ -294,6 +306,7 @@ public class ScreenAccount : MonoBehaviour
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
         {
+            SceneController.Instance.BackStack.Push("account");
             Application.LoadLevel("singleBath");
         }
         facebookRect = new Rect(unit_w * 5, unit_h * 13.5f, unit_w * 0.5f, unit_h);

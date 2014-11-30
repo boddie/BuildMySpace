@@ -11,6 +11,8 @@ public class SceneController : MonoBehaviour
     public Dictionary<string, Item> ItemList;
     public List<string> Favorites;
 
+    public Stack<string> BackStack;
+
     private void Awake()
     {
         if (Instance != null)
@@ -32,6 +34,7 @@ public class SceneController : MonoBehaviour
             Password = string.Empty;
         }
 
+        BackStack = new Stack<string>();
         ItemList = new Dictionary<string, Item>();
         Favorites = new List<string>();
         AddItems();
