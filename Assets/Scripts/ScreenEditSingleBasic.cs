@@ -138,7 +138,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
             GUI.DrawTexture(rectAdd, addButton);
             if (GUI.Button(rectAdd, "", "Label"))
             {
-                
+                GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), Vector3.zero, Quaternion.identity) as GameObject;
+                obj.GetComponent<Marker>().InnerCamera = InnerCamera.camera;
             }
 
             GUI.DrawTexture(rectFavorite, favoriteButton);

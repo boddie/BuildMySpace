@@ -117,7 +117,6 @@ public class ScreenAccount : MonoBehaviour
 
     private void OnGUI()
     {
-        Debug.Log(Screen.width + ", " + Screen.height);
         GUI.DrawTexture(rectStrip, stripColor);
         GUI.DrawTexture(rectBMSLogo, logoBMS);
         GUI.DrawTexture(rectSignOut, signOutButton);
