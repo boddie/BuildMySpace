@@ -39,10 +39,10 @@ public class SceneController : MonoBehaviour
         Favorites = new List<string>();
         AddItems();
 
-		Favorites.Add ("Efficient Desk Lamp");
-		Favorites.Add ("Efficient Floor Lamp");
-		Favorites.Add ("Inefficient Laptop");
-		Favorites.Add ("Inefficient Printer");
+		//Favorites.Add ("Efficient Desk Lamp");
+		//Favorites.Add ("Efficient Floor Lamp");
+		//Favorites.Add ("Inefficient Laptop");
+		//Favorites.Add ("Inefficient Printer");
     }
 
     private void AddItems()
