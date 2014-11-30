@@ -21,7 +21,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
     private Texture2D topViewButton;
     private Texture2D sideViewButton;
     private Texture2D addButton;
-    private Texture2D favoriteButton;
+	private Texture2D favoriteButton;
+	private Texture2D background;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -60,8 +61,12 @@ public class ScreenEditSingleBasic : MonoBehaviour
         highlightStyle.fontStyle = FontStyle.Bold;
         highlightStyle.normal.textColor = Color.black;
 
+		background = new Texture2D (1, 1);
+		background.SetPixel (0, 0, Color.gray);
+		background.Apply ();
+
         labelStyle = new GUIStyle();
-        labelStyle.fontSize = 25;
+        labelStyle.fontSize = 16;
         labelStyle.normal.textColor = Color.black;
     }
 
@@ -124,16 +129,33 @@ public class ScreenEditSingleBasic : MonoBehaviour
 
     private void DrawItems()
     {
-        scrollPos = GUI.BeginScrollView(new Rect(unit_w * 9, unit_h * 4, unit_w * 6, unit_h * 11), scrollPos, new Rect(0, 0, 2000, 2000));
+		Rect rectItems = new Rect(unit_w * 9, unit_h * 4, unit_w * 6, unit_h * 11);
+		Rect rectItemsInner = new Rect (0, 0, 2000, 2000);
+		GUI.DrawTexture (rectItems, background);
+        scrollPos = GUI.BeginScrollView(rectItems, scrollPos, rectItemsInner);
+
+		float screenRatio = ((float) Screen.height) / ((float)Screen.width);
+		Debug.Log (screenRatio);
+
+		float xBuffer = unit_w * 0.1f;
+		float yBuffer = unit_h * 0.1f;
+		float currentYPos = yBuffer;
+
         foreach (var item in SceneController.Instance.ItemList)
         {
-            Rect rectAdd = new Rect(0, 0, 0, 0);
-            Rect rectFavorite = new Rect(0, 0, 0, 0);
-
             Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
-            GUI.Label(new Rect(0, 0, size.x, size.y), item.Key, labelStyle);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.Logo);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.EfficiencyImage);
+
+			Rect rectLogo = new Rect(xBuffer, currentYPos, unit_w * screenRatio, unit_h);
+			GUI.DrawTexture(rectLogo, item.Value.Logo);
+			
+			Rect rectEfficiencyImage = new Rect(rectLogo.xMax + xBuffer, currentYPos, unit_w * screenRatio, unit_h);
+			GUI.DrawTexture(rectEfficiencyImage, item.Value.EfficiencyImage);
+
+			Rect rectLabel = new Rect(rectEfficiencyImage.xMax + xBuffer, currentYPos, size.x, size.y);
+            GUI.Label(rectLabel, item.Key, labelStyle);
+
+			Rect rectAdd = new Rect(rectLabel.xMax + xBuffer, currentYPos, unit_w, size.y);
+			Rect rectFavorite = new Rect(rectAdd.xMax + xBuffer, currentYPos, unit_w, size.y);
 
             GUI.DrawTexture(rectAdd, addButton);
             if (GUI.Button(rectAdd, "", "Label"))
@@ -149,6 +171,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
                     SceneController.Instance.Favorites.Add(item.Key);
                 }
             }
+
+			currentYPos = currentYPos + unit_h + yBuffer;
         }
         GUI.EndScrollView();
     }
