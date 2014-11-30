@@ -160,7 +160,7 @@ public class ScreenEditSingleBasic : MonoBehaviour
             GUI.DrawTexture(rectAdd, addButton);
             if (GUI.Button(rectAdd, "", "Label"))
             {
-                
+                GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity) as GameObject;
             }
 
             GUI.DrawTexture(rectFavorite, favoriteButton);
