@@ -124,7 +124,7 @@ public class ScreenEditSingleBasic : MonoBehaviour
 
     private void DrawItems()
     {
-        scrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), scrollPos, new Rect(0, 0, 0, 0));
+        scrollPos = GUI.BeginScrollView(new Rect(unit_w * 9, unit_h * 4, unit_w * 6, unit_h * 11), scrollPos, new Rect(0, 0, 2000, 2000));
         foreach (var item in SceneController.Instance.ItemList)
         {
             Rect rectAdd = new Rect(0, 0, 0, 0);
