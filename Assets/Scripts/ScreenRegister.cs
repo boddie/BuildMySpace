@@ -16,6 +16,7 @@ public class ScreenRegister : MonoBehaviour
     private Texture2D registerButton;
     private Texture2D homeImage;
     private Texture2D logoBMS;
+    private Texture2D backButton;
 
     private Rect rectStrip;
     private Rect rectRegisterButton;
@@ -31,6 +32,7 @@ public class ScreenRegister : MonoBehaviour
     private Rect rectEmailLabel;
     private Rect rectEmailField;
     private Rect rectErrorLabel;
+    private Rect rectBackButton;
 
     private GUIStyle labelStyle;
     private GUIStyle registerStyle;
@@ -55,6 +57,7 @@ public class ScreenRegister : MonoBehaviour
         registerButton = Resources.Load<Texture2D>("Textures/RegisterTexture");
         homeImage = Resources.Load<Texture2D>("Textures/RoomSingleBasicTexture");
         logoBMS = Resources.Load<Texture2D>("Textures/LogoBMS");
+        backButton = Resources.Load<Texture2D>("Textures/BackTexture");
 
         fieldSkin = Resources.Load<GUISkin>("Skins/TextFieldSkin");
 
@@ -77,6 +80,7 @@ public class ScreenRegister : MonoBehaviour
         rectStrip = new Rect(0, 0, Screen.width, unit_h * 2);
         rectHomeImage = new Rect(unit_w, unit_h * 3, unit_w * 7, unit_h * 12);
         rectBMSLogo = new Rect(unit_w, unit_h * 0.15f, unit_w * 5, unit_h * 1.7f);
+        rectBackButton = new Rect(Screen.width - unit_w * 2, unit_h * 0.5f, unit_w * 1.5f, unit_h);
 
         Vector2 labelSize = registerStyle.CalcSize(new GUIContent("Registration"));
         rectRegisterLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
@@ -108,6 +112,11 @@ public class ScreenRegister : MonoBehaviour
         GUI.DrawTexture(rectStrip, stripColor);
         GUI.DrawTexture(rectHomeImage, homeImage);
         GUI.DrawTexture(rectBMSLogo, logoBMS);
+        GUI.DrawTexture(rectBackButton, backButton);
+        if (GUI.Button(rectBackButton, "", "Label"))
+        {
+            Application.LoadLevel(SceneController.Instance.BackStack.Pop());
+        }
 
         GUI.Label(rectRegisterLabel, "Registration", registerStyle);
         GUI.Label(rectUsernameLabel, "Username", labelStyle);
@@ -137,6 +146,7 @@ public class ScreenRegister : MonoBehaviour
                 PlayerPrefs.SetString("username", username);
                 PlayerPrefs.SetString("email", email);
                 PlayerPrefs.SetString("password", password);
+                SceneController.Instance.BackStack.Push("register");
                 Application.LoadLevel("signon");
             }
             else

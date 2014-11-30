@@ -111,6 +111,7 @@ public class ScreenHome : MonoBehaviour
                 username != string.Empty &&
                 password != string.Empty)
             {
+                SceneController.Instance.BackStack.Push("signon");
                 Application.LoadLevel("account");
             }
             else
@@ -124,6 +125,7 @@ public class ScreenHome : MonoBehaviour
         GUI.DrawTexture(rectRegisterButton, registerButton);
         if (GUI.Button(rectRegisterButton, "", "Label"))
         {
+            SceneController.Instance.BackStack.Push("signon");
             Application.LoadLevel("register");
         }
 
