@@ -6,7 +6,7 @@ public class ScreenRegister : MonoBehaviour
     #region Class Member Variables
 
     private const float DIVISOR = 16;
-    private const int FIELD_MAX = 15;
+    private const int FIELD_MAX = 30;
 
     private float unit_w;
     private float unit_h;
@@ -18,7 +18,6 @@ public class ScreenRegister : MonoBehaviour
     private Texture2D logoBMS;
 
     private Rect rectStrip;
-    private Rect rectLoginButton;
     private Rect rectRegisterButton;
     private Rect rectHomeImage;
     private Rect rectBMSLogo;
@@ -28,7 +27,6 @@ public class ScreenRegister : MonoBehaviour
     private Rect rectPassField;
     private Rect rectRePassLabel;
     private Rect rectRePassField;
-    private Rect rectNewUserLabel;
     private Rect rectRegisterLabel;
     private Rect rectEmailLabel;
     private Rect rectEmailField;
@@ -52,7 +50,6 @@ public class ScreenRegister : MonoBehaviour
         stripColor.SetPixel(0, 0, Color.blue);
         stripColor.Apply();
 
-        loginButton = Resources.Load<Texture2D>("Textures/LoginTexture");
         registerButton = Resources.Load<Texture2D>("Textures/RegisterTexture");
         homeImage = Resources.Load<Texture2D>("Textures/RoomSingleBasicTexture");
         logoBMS = Resources.Load<Texture2D>("Textures/LogoBMS");
@@ -122,7 +119,20 @@ public class ScreenRegister : MonoBehaviour
         GUI.DrawTexture(rectRegisterButton, registerButton);
         if (GUI.Button(rectRegisterButton, "", "Label"))
         {
-            Application.LoadLevel("main");
+            SceneController.Instance.Username = username;
+            SceneController.Instance.Email = email;
+            SceneController.Instance.Password = password;
+            if (username != string.Empty &&
+                email != string.Empty &&
+                password != string.Empty &&
+                password == repassword)
+            {
+                Application.LoadLevel("signon");
+            }
+            else
+            {
+                // todo error
+            }
         }
     }
 

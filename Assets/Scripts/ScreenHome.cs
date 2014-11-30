@@ -6,7 +6,7 @@ public class ScreenHome : MonoBehaviour
     #region Class Member Variables
 
     private const float DIVISOR = 16;
-    private const int FIELD_MAX = 15;
+    private const int FIELD_MAX = 30;
 
     private float unit_w;
     private float unit_h;
@@ -54,6 +54,8 @@ public class ScreenHome : MonoBehaviour
         labelStyle = new GUIStyle();
         labelStyle.fontSize = 25;
         labelStyle.normal.textColor = Color.black;
+
+        username = SceneController.Instance.Username;
 	}
 	
 	private void Update ()
@@ -98,7 +100,17 @@ public class ScreenHome : MonoBehaviour
         GUI.DrawTexture(rectLoginButton, loginButton);
         if(GUI.Button(rectLoginButton, "", "Label"))
         {
-
+            if (username == SceneController.Instance.Username &&
+                password == SceneController.Instance.Password &&
+                username != string.Empty &&
+                password != string.Empty)
+            {
+                Application.LoadLevel("account");
+            }
+            else
+            {
+                // Todo error
+            }
         }
 
         GUI.Label(rectNewUserLabel, "Are you a new user?", labelStyle);
