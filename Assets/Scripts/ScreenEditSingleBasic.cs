@@ -66,7 +66,7 @@ public class ScreenEditSingleBasic : MonoBehaviour
 		background.Apply ();
 
         labelStyle = new GUIStyle();
-        labelStyle.fontSize = 16;
+        labelStyle.fontSize = 20;
         labelStyle.normal.textColor = Color.black;
     }
 
@@ -130,12 +130,11 @@ public class ScreenEditSingleBasic : MonoBehaviour
     private void DrawItems()
     {
 		Rect rectItems = new Rect(unit_w * 9, unit_h * 4, unit_w * 6, unit_h * 11);
-		Rect rectItemsInner = new Rect (0, 0, 2000, 2000);
+		Rect rectItemsInner = new Rect (0, 0, rectItems.width, SceneController.Instance.ItemList.Count * unit_h);
 		GUI.DrawTexture (rectItems, background);
         scrollPos = GUI.BeginScrollView(rectItems, scrollPos, rectItemsInner);
 
 		float screenRatio = ((float) Screen.height) / ((float)Screen.width);
-		Debug.Log (screenRatio);
 
 		float xBuffer = unit_w * 0.1f;
 		float yBuffer = unit_h * 0.1f;
@@ -151,11 +150,12 @@ public class ScreenEditSingleBasic : MonoBehaviour
 			Rect rectEfficiencyImage = new Rect(rectLogo.xMax + xBuffer, currentYPos, unit_w * screenRatio, unit_h);
 			GUI.DrawTexture(rectEfficiencyImage, item.Value.EfficiencyImage);
 
-			Rect rectLabel = new Rect(rectEfficiencyImage.xMax + xBuffer, currentYPos, size.x, size.y);
-            GUI.Label(rectLabel, item.Key, labelStyle);
+			Rect rectAdd = new Rect(rectEfficiencyImage.xMax + xBuffer, currentYPos, unit_w, unit_h);
+			Rect rectFavorite = new Rect(rectAdd.xMax + xBuffer, currentYPos, unit_w, unit_h);
+			
+			Rect rectLabel = new Rect(rectFavorite.xMax + xBuffer, currentYPos + (unit_h - size.y)/2.0f, size.x, unit_h);
+			GUI.Label(rectLabel, item.Key, labelStyle);
 
-			Rect rectAdd = new Rect(rectLabel.xMax + xBuffer, currentYPos, unit_w, size.y);
-			Rect rectFavorite = new Rect(rectAdd.xMax + xBuffer, currentYPos, unit_w, size.y);
 
             GUI.DrawTexture(rectAdd, addButton);
             if (GUI.Button(rectAdd, "", "Label"))
