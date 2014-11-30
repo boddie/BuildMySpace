@@ -19,7 +19,10 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Texture2D signOutButton;
     private Texture2D backButton;
     private Texture2D topViewButton;
-    private Texture2D sideViewButton;
+	private Texture2D sideViewButton;
+	private Texture2D addButton;
+	private Texture2D favoriteButton;
+	private Texture2D background;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -28,9 +31,9 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Rect rectItemLabel;
     private Rect rectBackButton;
     private Rect rectSideView;
-    private Rect rectTopView;
-
-    private Vector2 favoriteScrollPos = Vector2.zero;
+	private Rect rectTopView;
+	
+	private Vector2 scrollPos = Vector2.zero;
 
     private GUIStyle labelStyle;
     private GUIStyle highlightStyle;
@@ -49,15 +52,21 @@ public class ScreenEditSingleBath : MonoBehaviour
         signOutButton = Resources.Load<Texture2D>("Textures/SignOutTexture");
         backButton = Resources.Load<Texture2D>("Textures/BackTexture");
         topViewButton = Resources.Load<Texture2D>("Textures/TopViewTexture");
-        sideViewButton = Resources.Load<Texture2D>("Textures/SideViewTexture");
+		sideViewButton = Resources.Load<Texture2D>("Textures/SideViewTexture");
+		addButton = Resources.Load<Texture2D>("Textures/AddTexture");
+		favoriteButton = Resources.Load<Texture2D>("Textures/FavoriteTexture");
 
         highlightStyle = new GUIStyle();
         highlightStyle.fontSize = 32;
         highlightStyle.fontStyle = FontStyle.Bold;
-        highlightStyle.normal.textColor = Color.black;
+		highlightStyle.normal.textColor = Color.black;
+		
+		background = new Texture2D (1, 1);
+		background.SetPixel (0, 0, Color.gray);
+		background.Apply ();
 
         labelStyle = new GUIStyle();
-        labelStyle.fontSize = 25;
+        labelStyle.fontSize = 20;
         labelStyle.normal.textColor = Color.black;
     }
 
@@ -118,16 +127,52 @@ public class ScreenEditSingleBath : MonoBehaviour
 
     #endregion
 
-    private void DrawItems()
-    {
-        favoriteScrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
-        foreach (var item in SceneController.Instance.ItemList)
-        {
-            Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
-            GUI.Label(new Rect(0, 0, size.x, size.y), item.Key, labelStyle);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.Logo);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.EfficiencyImage);
-        }
-        GUI.EndScrollView();
-    }
+	private void DrawItems()
+	{
+		Rect rectItems = new Rect(unit_w * 9, unit_h * 4, unit_w * 6, unit_h * 11);
+		Rect rectItemsInner = new Rect (0, 0, rectItems.width, SceneController.Instance.ItemList.Count * unit_h);
+		GUI.DrawTexture (rectItems, background);
+		scrollPos = GUI.BeginScrollView(rectItems, scrollPos, rectItemsInner);
+		
+		float screenRatio = ((float) Screen.height) / ((float)Screen.width);
+		
+		float xBuffer = unit_w * 0.1f;
+		float yBuffer = unit_h * 0.1f;
+		float currentYPos = yBuffer;
+		
+		foreach (var item in SceneController.Instance.ItemList)
+		{
+			Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
+			
+			Rect rectLogo = new Rect(xBuffer, currentYPos, unit_w * screenRatio, unit_h);
+			GUI.DrawTexture(rectLogo, item.Value.Logo);
+			
+			Rect rectEfficiencyImage = new Rect(rectLogo.xMax + xBuffer, currentYPos, unit_w * screenRatio, unit_h);
+			GUI.DrawTexture(rectEfficiencyImage, item.Value.EfficiencyImage);
+			
+			Rect rectAdd = new Rect(rectEfficiencyImage.xMax + xBuffer, currentYPos, unit_w, unit_h);
+			Rect rectFavorite = new Rect(rectAdd.xMax + xBuffer, currentYPos, unit_w, unit_h);
+			
+			Rect rectLabel = new Rect(rectFavorite.xMax + xBuffer, currentYPos + (unit_h - size.y)/2.0f, size.x, unit_h);
+			GUI.Label(rectLabel, item.Key, labelStyle);
+
+			GUI.DrawTexture(rectAdd, addButton);
+			if (GUI.Button(rectAdd, "", "Label"))
+			{
+				GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity) as GameObject;
+			}
+			
+			GUI.DrawTexture(rectFavorite, favoriteButton);
+			if (GUI.Button(rectFavorite, "", "Label"))
+			{
+				if (!SceneController.Instance.Favorites.Contains(item.Key))
+				{
+					SceneController.Instance.Favorites.Add(item.Key);
+				}
+			}
+			
+			currentYPos = currentYPos + unit_h + yBuffer;
+		}
+		GUI.EndScrollView();
+	}
 }

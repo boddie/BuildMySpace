@@ -156,7 +156,6 @@ public class ScreenEditSingleBasic : MonoBehaviour
 			Rect rectLabel = new Rect(rectFavorite.xMax + xBuffer, currentYPos + (unit_h - size.y)/2.0f, size.x, unit_h);
 			GUI.Label(rectLabel, item.Key, labelStyle);
 
-
             GUI.DrawTexture(rectAdd, addButton);
             if (GUI.Button(rectAdd, "", "Label"))
             {
