@@ -20,6 +20,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
     private Texture2D backButton;
     private Texture2D topViewButton;
     private Texture2D sideViewButton;
+    private Texture2D addButton;
+    private Texture2D favoriteButton;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -30,7 +32,7 @@ public class ScreenEditSingleBasic : MonoBehaviour
     private Rect rectSideView;
     private Rect rectTopView;
 
-    private Vector2 favoriteScrollPos = Vector2.zero;
+    private Vector2 scrollPos = Vector2.zero;
 
     private GUIStyle labelStyle;
     private GUIStyle highlightStyle;
@@ -50,6 +52,8 @@ public class ScreenEditSingleBasic : MonoBehaviour
         backButton = Resources.Load<Texture2D>("Textures/BackTexture");
         topViewButton = Resources.Load<Texture2D>("Textures/TopViewTexture");
         sideViewButton = Resources.Load<Texture2D>("Textures/SideViewTexture");
+        addButton = Resources.Load<Texture2D>("Textures/AddTexture");
+        favoriteButton = Resources.Load<Texture2D>("Textures/FavoriteTexture");
 
         highlightStyle = new GUIStyle();
         highlightStyle.fontSize = 32;
@@ -120,13 +124,31 @@ public class ScreenEditSingleBasic : MonoBehaviour
 
     private void DrawItems()
     {
-        favoriteScrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
+        scrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), scrollPos, new Rect(0, 0, 0, 0));
         foreach (var item in SceneController.Instance.ItemList)
         {
+            Rect rectAdd = new Rect(0, 0, 0, 0);
+            Rect rectFavorite = new Rect(0, 0, 0, 0);
+
             Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
             GUI.Label(new Rect(0, 0, size.x, size.y), item.Key, labelStyle);
             GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.Logo);
             GUI.DrawTexture(new Rect(0, 0, 0, 0), item.Value.EfficiencyImage);
+
+            GUI.DrawTexture(rectAdd, addButton);
+            if (GUI.Button(rectAdd, "", "Label"))
+            {
+                
+            }
+
+            GUI.DrawTexture(rectFavorite, favoriteButton);
+            if (GUI.Button(rectFavorite, "", "Label"))
+            {
+                if (!SceneController.Instance.Favorites.Contains(item.Key))
+                {
+                    SceneController.Instance.Favorites.Add(item.Key);
+                }
+            }
         }
         GUI.EndScrollView();
     }
