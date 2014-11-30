@@ -13,6 +13,7 @@ public class ScreenEditSingleBath : MonoBehaviour
 
     private float unit_w;
 	private float unit_h;
+    private float max_w = 0;
 	
 	private int greenScore;
 
@@ -68,7 +69,7 @@ public class ScreenEditSingleBath : MonoBehaviour
 		background.Apply ();
 
         labelStyle = new GUIStyle();
-        labelStyle.fontSize = 20;
+        labelStyle.fontSize = 19;
 		labelStyle.normal.textColor = Color.black;
 		
 		greenScore = 0;
@@ -134,7 +135,7 @@ public class ScreenEditSingleBath : MonoBehaviour
 	private void DrawItems()
 	{
 		Rect rectItems = new Rect(unit_w * 9, unit_h * 4, unit_w * 6, unit_h * 11);
-		Rect rectItemsInner = new Rect (0, 0, rectItems.width, SceneController.Instance.ItemList.Count * unit_h);
+		Rect rectItemsInner = new Rect (0, 0, max_w, SceneController.Instance.ItemList.Count * unit_h);
 		GUI.DrawTexture (rectItems, background);
 		scrollPos = GUI.BeginScrollView(rectItems, scrollPos, rectItemsInner);
 		
@@ -143,7 +144,7 @@ public class ScreenEditSingleBath : MonoBehaviour
 		float xBuffer = unit_w * 0.1f;
 		float yBuffer = unit_h * 0.1f;
 		float currentYPos = yBuffer;
-		
+
 		foreach (var item in SceneController.Instance.ItemList)
 		{
 			Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
@@ -163,7 +164,7 @@ public class ScreenEditSingleBath : MonoBehaviour
 			GUI.DrawTexture(rectAdd, addButton);
 			if (GUI.Button(rectAdd, "", "Label"))
 			{
-				GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity) as GameObject;
+				GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity);
 				if(item.Value.EfficiencyImage == Resources.Load<Texture2D>("Textures/efficient")) {
 					greenScore += 5;
 				} else greenScore -= 5;
@@ -179,6 +180,11 @@ public class ScreenEditSingleBath : MonoBehaviour
 			}
 			
 			currentYPos = currentYPos + unit_h + yBuffer;
+            float current_w = rectLogo.width + rectEfficiencyImage.width + rectAdd.width + rectFavorite.width + rectLabel.width;
+            if (current_w > max_w)
+            {
+                max_w = current_w;
+            }
 		}
 		GUI.EndScrollView();
 	}

@@ -170,7 +170,7 @@ public class ScreenAccount : MonoBehaviour
 		float currentYPos = rectFavoritesInnerYPos;
 
 		// Buffered height/width for favorite item
-		Vector2 favoriteStyle = scrollStyle.CalcSize (new GUIContent (SceneController.Instance.Favorites [0]));
+		Vector2 favoriteStyle = scrollStyle.CalcSize (new GUIContent ("Efficient Floor Lamp"));
 		float favoriteHeight = favoriteStyle.y + yBuffer;
 		float favoriteWidth = favoriteStyle.x + (xBuffer * 2);
 		
@@ -189,7 +189,7 @@ public class ScreenAccount : MonoBehaviour
 		Rect rectFavorites = new Rect (rectFavoritesXPos, rectFavoritesYPos, rectFavoritesInner.width, rectFavoritesInner.height + yBuffer);
         GUI.DrawTexture(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8, rectFavorites.height + 20)), background);
 
-        favoriteScrollPos = GUI.BeginScrollView(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8, rectFavorites.height + 20)), favoriteScrollPos, rectFavoritesInner);
+        favoriteScrollPos = GUI.BeginScrollView(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8 + 30, rectFavorites.height + 30)), favoriteScrollPos, rectFavoritesInner);
 
         foreach (var fav in SceneController.Instance.Favorites)
         {
