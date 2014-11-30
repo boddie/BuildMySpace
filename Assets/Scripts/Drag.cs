@@ -13,6 +13,20 @@ public class Drag : MonoBehaviour
         innerCamera = GameObject.Find("Inner Camera").camera;
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit vHit = new RaycastHit();
+            Ray vRay = innerCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(vRay, out vHit, 1000))
+            {
+                if(vHit.transform == this.transform)
+                    vHit.transform.Rotate(new Vector3(0, 1, 0), 90);
+            }
+        }
+    }
+
     private void OnMouseDown()
     {
         plane.SetNormalAndPosition(innerCamera.transform.forward, transform.position);
