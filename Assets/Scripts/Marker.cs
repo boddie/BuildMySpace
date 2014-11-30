@@ -19,17 +19,17 @@ public class Marker : MonoBehaviour
     /// <summary>
     /// Height of the texture
     /// </summary>
-    public float Texture_Height = 20;
+    public float Texture_Height = 100;
 
     /// <summary>
     /// Width of the Texture
     /// </summary>
-    public float Texture_Width = 20;
+    public float Texture_Width = 100;
 
     /// <summary>
     /// Camera used for screen point calculations
     /// </summary>
-    public Camera InnerCamera;
+    private Camera innerCamera;
 
     /// <summary>
     /// Calculated point to draw the marker and label
@@ -42,26 +42,28 @@ public class Marker : MonoBehaviour
     private bool draw;
 
     /// <summary>
+    /// Finds camera in scene
+    /// </summary>
+    private void Start()
+    {
+        innerCamera = GameObject.Find("Inner Camera").camera;
+    }
+
+    /// <summary>
     /// Calculates the screenpoint of the 3D object and determines
     /// if it should be drawn or not.
     /// </summary>
-    void Update()
+    private void Update()
     {
-        screenPoint = InnerCamera.WorldToScreenPoint(transform.position);
-        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-        draw = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+        screenPoint = innerCamera.WorldToScreenPoint(transform.position);
     }
 
     /// <summary>
     /// Draw the label and marker texture for 3D object on the screen
     /// </summary>
-    void OnGUI()
+    private void OnGUI()
     {
-        // Only draws if in the camera view
-        if (draw)
-        {
-            // Draws the marker above the object
-            GUI.DrawTexture(new Rect(screenPoint.x - Texture_Width / 2, (Screen.height - screenPoint.y) - (Y_Offset + Texture_Height), Texture_Width, Texture_Height), MarkerTexture);
-        }
+        // Draws the marker above the object
+        GUI.DrawTexture(new Rect(screenPoint.x - Texture_Width / 2, (Screen.height - screenPoint.y) - (Y_Offset + Texture_Height), Texture_Width, Texture_Height), MarkerTexture);
     }
 }

@@ -190,8 +190,6 @@ public class ScreenAccount : MonoBehaviour
         GUI.DrawTexture(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8, rectFavorites.height + 20)), background);
 
         favoriteScrollPos = GUI.BeginScrollView(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8, rectFavorites.height + 20)), favoriteScrollPos, rectFavoritesInner);
-		
-		Rect buttonRect = new Rect (0, 0, 0, 0);
 
         foreach (var fav in SceneController.Instance.Favorites)
         {
