@@ -22,6 +22,7 @@ public class ScreenAccount : MonoBehaviour
     private Texture2D singleBath;
     private Texture2D editButton;
     private Texture2D backButton;
+	private Texture2D background;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -63,6 +64,10 @@ public class ScreenAccount : MonoBehaviour
         singleBath = Resources.Load<Texture2D>("Textures/RoomSingleBathTexture");
         editButton = Resources.Load<Texture2D>("Textures/EditTexture");
         backButton = Resources.Load<Texture2D>("Textures/BackTexture");
+
+		background = new Texture2D (1, 1);
+		background.SetPixel (0, 0, Color.gray);
+		background.Apply ();
 
         highlightStyle = new GUIStyle();
         highlightStyle.fontSize = 32;
@@ -144,7 +149,29 @@ public class ScreenAccount : MonoBehaviour
     {
         Queue<string> removeQ = new Queue<string>();
 
-        favoriteScrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
+		float xBufferStatic = 2.0f;
+		float yBufferMultiplier = 0.05f;
+
+		float rectFavoritesXPos = rectFavoriteLabel.x;
+		float rectFavoritesYPos = rectFavoriteLabel.y + rectFavoriteLabel.height;
+
+		float rectFavoritesInnerXPos = rectFavoritesXPos + xBufferStatic;
+		float rectFavoritesInnerYPos = rectFavoritesYPos + rectFavoriteLabel.height * yBufferMultiplier;
+		
+		float currentYPos = rectFavoritesInnerYPos;
+
+		Vector2 favoriteStyle = labelStyle.CalcSize (new GUIContent (SceneController.Instance.Favorites [0]));
+		float favoriteHeight = favoriteStyle.y;
+		float favoriteWidth = favoriteStyle.x;
+
+		int numFavorites = SceneController.Instance.Favorites.Count;
+
+		Rect rectFavoritesInner = new Rect (rectFavoritesInnerXPos, rectFavoritesInnerYPos, favoriteWidth + xBufferStatic, favoriteHeight * yBufferMultiplier + favoriteHeight * (numFavorites + 1));
+		Rect rectFavorites = new Rect (rectFavoritesXPos, rectFavoritesYPos, favoriteWidth + xBufferStatic * 2.0f, rectFavoritesInner.height + favoriteHeight * yBufferMultiplier);
+		GUI.DrawTexture (rectFavorites, background);
+
+		favoriteScrollPos = GUI.BeginScrollView(rectFavorites, favoriteScrollPos, rectFavoritesInner);
+
         foreach (var fav in SceneController.Instance.Favorites)
         {
             Rect rectPurchase = new Rect(0, 0, 0, 0);
@@ -152,10 +179,9 @@ public class ScreenAccount : MonoBehaviour
             Rect rectFacebook = new Rect(0, 0, 0, 0);
             Rect rectTwitter = new Rect(0, 0, 0, 0);
 
-            Vector2 size = labelStyle.CalcSize(new GUIContent(fav));
-            GUI.Label(new Rect(0, 0, size.x, size.y), fav, labelStyle);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), SceneController.Instance.ItemList[fav].Logo);
-            GUI.DrawTexture(new Rect(0, 0, 0, 0), SceneController.Instance.ItemList[fav].EfficiencyImage);
+			GUI.Label(new Rect(rectFavoritesInner.x, currentYPos, favoriteWidth, favoriteHeight), fav, labelStyle);
+			GUI.DrawTexture(new Rect(0,0,0,0), SceneController.Instance.ItemList[fav].EfficiencyImage);
+			GUI.DrawTexture(new Rect(0,0,0,0), SceneController.Instance.ItemList[fav].Logo);
 
             GUI.DrawTexture(rectPurchase, purchaseButton);
             if (GUI.Button(rectPurchase, "", "Label"))
@@ -180,6 +206,8 @@ public class ScreenAccount : MonoBehaviour
             {
                 Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
             }
+
+			currentYPos = currentYPos + favoriteHeight + favoriteHeight * yBufferMultiplier;
         }
         GUI.EndScrollView();
 
