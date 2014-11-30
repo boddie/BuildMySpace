@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScreenEditLayout : MonoBehaviour {
+public class ScreenEditDoubleBasic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
