@@ -17,6 +17,10 @@ public class ScreenAccount : MonoBehaviour
     private Texture2D facebookButton;
     private Texture2D twitterButton;
     private Texture2D deleteButton;
+    private Texture2D singleBasic;
+    private Texture2D doubleBasic;
+    private Texture2D singleBath;
+    private Texture2D editButton;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -52,6 +56,10 @@ public class ScreenAccount : MonoBehaviour
         facebookButton = Resources.Load<Texture2D>("Textures/facebook");
         twitterButton = Resources.Load<Texture2D>("Textures/twitter");
         deleteButton = Resources.Load<Texture2D>("Textures/DeleteTexture");
+        singleBasic = Resources.Load<Texture2D>("Textures/RoomSingleBasicTexture");
+        doubleBasic = Resources.Load<Texture2D>("Textures/RoomDualBasicTexture");
+        singleBath = Resources.Load<Texture2D>("Textures/RoomSingleBathTexture");
+        editButton = Resources.Load<Texture2D>("Textures/EditTexture");
 
         highlightStyle = new GUIStyle();
         highlightStyle.fontSize = 32;
@@ -118,8 +126,7 @@ public class ScreenAccount : MonoBehaviour
             DrawFavorites();
         }
 
-        GUI.Label(rectLayoutLabel, "Layouts", highlightStyle);
-        
+        DrawLayouts();
     }
 
     #endregion
@@ -128,7 +135,7 @@ public class ScreenAccount : MonoBehaviour
     {
         Queue<string> removeQ = new Queue<string>();
 
-        GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
+        favoriteScrollPos = GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
         foreach (var fav in SceneController.Instance.Favorites)
         {
             Rect rectPurchase = new Rect(0, 0, 0, 0);
@@ -170,6 +177,77 @@ public class ScreenAccount : MonoBehaviour
         while (removeQ.Count > 0)
         {
             SceneController.Instance.Favorites.Remove(removeQ.Dequeue());
+        }
+    }
+
+    private void DrawLayouts()
+    {
+        GUI.Label(rectLayoutLabel, "Layouts", highlightStyle);
+
+        GUI.DrawTexture(new Rect(0, 0, 0, 0), singleBasic);
+        Vector2 labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
+        GUI.Label(new Rect(0, 0, labelSize.x, labelSize.y), "Single Basic", labelStyle);
+        Rect editRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(editRect, editButton);
+        if (GUI.Button(editRect, "", "Label"))
+        {
+
+        }
+        Rect facebookRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(facebookRect, facebookButton);
+        if (GUI.Button(facebookRect, "", "Label"))
+        {
+
+        }
+        Rect twitterRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(twitterRect, twitterButton);
+        if (GUI.Button(twitterRect, "", "Label"))
+        {
+
+        }
+
+        GUI.DrawTexture(new Rect(0, 0, 0, 0), singleBasic);
+        labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
+        GUI.Label(new Rect(0, 0, labelSize.x, labelSize.y), "Single Basic", labelStyle);
+        editRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(editRect, editButton);
+        if (GUI.Button(editRect, "", "Label"))
+        {
+
+        }
+        facebookRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(facebookRect, facebookButton);
+        if (GUI.Button(facebookRect, "", "Label"))
+        {
+
+        }
+        twitterRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(twitterRect, twitterButton);
+        if (GUI.Button(twitterRect, "", "Label"))
+        {
+
+        }
+
+        GUI.DrawTexture(new Rect(0, 0, 0, 0), singleBasic);
+        labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
+        GUI.Label(new Rect(0, 0, labelSize.x, labelSize.y), "Single Basic", labelStyle);
+        editRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(editRect, editButton);
+        if (GUI.Button(editRect, "", "Label"))
+        {
+
+        }
+        facebookRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(facebookRect, facebookButton);
+        if (GUI.Button(facebookRect, "", "Label"))
+        {
+
+        }
+        twitterRect = new Rect(0, 0, 0, 0);
+        GUI.DrawTexture(twitterRect, twitterButton);
+        if (GUI.Button(twitterRect, "", "Label"))
+        {
+
         }
     }
 }
