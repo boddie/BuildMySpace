@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class ScreenAccount : MonoBehaviour
 {
@@ -13,6 +13,10 @@ public class ScreenAccount : MonoBehaviour
     private Texture2D stripColor;
     private Texture2D logoBMS;
     private Texture2D signOutButton;
+    private Texture2D purchaseButton;
+    private Texture2D facebookButton;
+    private Texture2D twitterButton;
+    private Texture2D deleteButton;
 
     private Rect rectStrip;
     private Rect rectBMSLogo;
@@ -21,6 +25,10 @@ public class ScreenAccount : MonoBehaviour
     private Rect rectAccountLabel;
     private Rect rectEmailLabel;
     private Rect rectFavoriteLabel;
+    private Rect rectNoFavsLabel;
+    private Rect rectLayoutLabel;
+
+    private Vector2 favoriteScrollPos = Vector2.zero;
 
     private GUIStyle labelStyle;
     private GUIStyle highlightStyle;
@@ -40,6 +48,10 @@ public class ScreenAccount : MonoBehaviour
 
         logoBMS = Resources.Load<Texture2D>("Textures/LogoBMS");
         signOutButton = Resources.Load<Texture2D>("Textures/SignOutTexture");
+        purchaseButton = Resources.Load<Texture2D>("Textures/PurchaseTexture");
+        facebookButton = Resources.Load<Texture2D>("Textures/facebook");
+        twitterButton = Resources.Load<Texture2D>("Textures/twitter");
+        deleteButton = Resources.Load<Texture2D>("Textures/DeleteTexture");
 
         highlightStyle = new GUIStyle();
         highlightStyle.fontSize = 32;
@@ -73,6 +85,12 @@ public class ScreenAccount : MonoBehaviour
 
         labelSize = highlightStyle.CalcSize(new GUIContent("Favorited Items"));
         rectFavoriteLabel = new Rect(unit_w * 9, unit_h * 6, labelSize.x, labelSize.y);
+
+        labelSize = labelStyle.CalcSize(new GUIContent("No favorited items"));
+        rectNoFavsLabel = new Rect(unit_w * 9, unit_h * 7, labelSize.x, labelSize.y);
+
+        labelSize = highlightStyle.CalcSize(new GUIContent("Layouts"));
+        rectLayoutLabel = new Rect(unit_w, unit_h * 2.5f, labelSize.x, labelSize.y);
     }
 
     private void OnGUI()
@@ -90,7 +108,68 @@ public class ScreenAccount : MonoBehaviour
         GUI.Label(rectUsernameLabel, "Username: " + username, labelStyle);
         GUI.Label(rectEmailLabel, "Email: " + email, labelStyle);
         GUI.Label(rectFavoriteLabel, "Favorited Items", highlightStyle);
+
+        if (SceneController.Instance.Favorites.Count == 0)
+        {
+            GUI.Label(rectNoFavsLabel, "No favorited items", labelStyle);
+        }
+        else
+        {
+            DrawFavorites();
+        }
+
+        GUI.Label(rectLayoutLabel, "Layouts", highlightStyle);
+        
     }
 
     #endregion
+
+    private void DrawFavorites()
+    {
+        Queue<string> removeQ = new Queue<string>();
+
+        GUI.BeginScrollView(new Rect(0, 0, 0, 0), favoriteScrollPos, new Rect(0, 0, 0, 0));
+        foreach (var fav in SceneController.Instance.Favorites)
+        {
+            Rect rectPurchase = new Rect(0, 0, 0, 0);
+            Rect rectDelete = new Rect(0, 0, 0, 0);
+            Rect rectFacebook = new Rect(0, 0, 0, 0);
+            Rect rectTwitter = new Rect(0, 0, 0, 0);
+
+            Vector2 size = labelStyle.CalcSize(new GUIContent(fav));
+            GUI.Label(new Rect(0, 0, size.x, size.y), fav, labelStyle);
+            GUI.DrawTexture(new Rect(0, 0, 0, 0), SceneController.Instance.ItemList[fav].Logo);
+            GUI.DrawTexture(new Rect(0, 0, 0, 0), SceneController.Instance.ItemList[fav].EfficiencyImage);
+
+            GUI.DrawTexture(rectPurchase, purchaseButton);
+            if (GUI.Button(rectPurchase, "", "Label"))
+            {
+                Application.ExternalEval("window.open('" + SceneController.Instance.ItemList[fav].PurchaseURL + "','_blank')");
+            }
+
+            GUI.DrawTexture(rectDelete, deleteButton);
+            if (GUI.Button(rectDelete, "", "Label"))
+            {
+                removeQ.Enqueue(fav);
+            }
+
+            GUI.DrawTexture(rectFacebook, facebookButton);
+            if (GUI.Button(rectFacebook, "", "Label"))
+            {
+                Application.ExternalEval("window.open('https://www.facebook.com/','_blank')");
+            }
+
+            GUI.DrawTexture(rectTwitter, twitterButton);
+            if (GUI.Button(rectTwitter, "", "Label"))
+            {
+                Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
+            }
+        }
+        GUI.EndScrollView();
+
+        while (removeQ.Count > 0)
+        {
+            SceneController.Instance.Favorites.Remove(removeQ.Dequeue());
+        }
+    }
 }

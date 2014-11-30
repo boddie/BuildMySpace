@@ -30,6 +30,7 @@ public class ScreenRegister : MonoBehaviour
     private Rect rectRegisterLabel;
     private Rect rectEmailLabel;
     private Rect rectEmailField;
+    private Rect rectErrorLabel;
 
     private GUIStyle labelStyle;
     private GUIStyle registerStyle;
@@ -39,6 +40,7 @@ public class ScreenRegister : MonoBehaviour
     private string password = string.Empty;
     private string repassword = string.Empty;
     private string email = string.Empty;
+    private string error = string.Empty;
 
     #endregion
 
@@ -64,6 +66,8 @@ public class ScreenRegister : MonoBehaviour
         labelStyle = new GUIStyle();
         labelStyle.fontSize = 25;
         labelStyle.normal.textColor = Color.black;
+
+        error = string.Empty;
     }
 
     private void Update()
@@ -94,6 +98,9 @@ public class ScreenRegister : MonoBehaviour
         rectEmailField = new Rect(unit_w * 9, unit_h * 11, unit_w * 4, unit_h);
 
         rectRegisterButton = new Rect(unit_w * 11.5f, unit_h * 12.5f, unit_w * 1.5f, unit_h);
+
+        labelSize = labelStyle.CalcSize(new GUIContent(error));
+        rectErrorLabel = new Rect(unit_w * 9, unit_h * 12.5f, labelSize.x, labelSize.y);
     }
 
     private void OnGUI()
@@ -131,9 +138,11 @@ public class ScreenRegister : MonoBehaviour
             }
             else
             {
-                // todo error
+                error = "Invalid Input";
             }
         }
+
+        GUI.Label(rectErrorLabel, error, labelStyle);
     }
 
     #endregion

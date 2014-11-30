@@ -27,12 +27,14 @@ public class ScreenHome : MonoBehaviour
     private Rect rectPassLabel;
     private Rect rectPassField;
     private Rect rectNewUserLabel;
+    private Rect rectErrorLabel;
 
     private GUIStyle labelStyle;
     private GUISkin fieldSkin;
 
     private string username = string.Empty;
     private string password = string.Empty;
+    private string error = string.Empty;
 
     #endregion
 
@@ -56,6 +58,7 @@ public class ScreenHome : MonoBehaviour
         labelStyle.normal.textColor = Color.black;
 
         username = SceneController.Instance.Username;
+        error = string.Empty;
 	}
 	
 	private void Update ()
@@ -80,6 +83,9 @@ public class ScreenHome : MonoBehaviour
         rectNewUserLabel = new Rect(unit_w * 9, unit_h * 9, labelSize.x, labelSize.y);
 
         rectRegisterButton = new Rect(unit_w * 11.5f, unit_h * 10f, unit_w * 1.5f, unit_h);
+
+        labelSize = labelStyle.CalcSize(new GUIContent(error));
+        rectErrorLabel = new Rect(unit_w * 9, unit_h * 12, labelSize.x, labelSize.y);
 	}
 
     private void OnGUI ()
@@ -109,7 +115,7 @@ public class ScreenHome : MonoBehaviour
             }
             else
             {
-                // Todo error
+                error = "Invalid username or password";
             }
         }
 
@@ -120,6 +126,8 @@ public class ScreenHome : MonoBehaviour
         {
             Application.LoadLevel("register");
         }
+
+        GUI.Label(rectErrorLabel, error, labelStyle);
     }
 
     #endregion
