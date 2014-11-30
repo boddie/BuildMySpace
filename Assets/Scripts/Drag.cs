@@ -15,7 +15,7 @@ public class Drag : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift))
         {
             RaycastHit vHit = new RaycastHit();
             Ray vRay = innerCamera.ScreenPointToRay(Input.mousePosition);

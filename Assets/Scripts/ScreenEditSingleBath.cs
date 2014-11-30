@@ -31,7 +31,6 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Rect rectSignOut;
     private Rect rectLayoutLabel;
 	private Rect rectItemLabel;
-	private Rect rectGreenLabel;
     private Rect rectBackButton;
     private Rect rectSideView;
 	private Rect rectTopView;
@@ -86,14 +85,11 @@ public class ScreenEditSingleBath : MonoBehaviour
         rectTopView = new Rect(unit_w, Screen.height - unit_h * 1.5f, unit_w * 1.5f, unit_h);
         rectSideView = new Rect(unit_w * 3, Screen.height - unit_h * 1.5f, unit_w * 1.5f, unit_h);
 
-        Vector2 labelSize = highlightStyle.CalcSize(new GUIContent("Single Bath Layout"));
+        Vector2 labelSize = highlightStyle.CalcSize(new GUIContent("Single Bath Layout (Green Score: XX)"));
         rectLayoutLabel = new Rect(unit_w, unit_h * 2.5f, labelSize.x, labelSize.y);
 
         labelSize = highlightStyle.CalcSize(new GUIContent("Layout Items"));
 		rectItemLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
-		
-		labelSize = highlightStyle.CalcSize (new GUIContent ("Green Score: XX"));
-		rectGreenLabel = new Rect (rectItemLabel.x - labelSize.x * 1.5f, unit_h * 2.5f, labelSize.x, labelSize.y);
     }
 
     private void OnGUI()
@@ -127,9 +123,8 @@ public class ScreenEditSingleBath : MonoBehaviour
             InnerCamera.transform.rotation = SideView.transform.rotation;
         }
 
-        GUI.Label(rectLayoutLabel, "Single Bath Layout", highlightStyle);
+        GUI.Label(rectLayoutLabel, "Single Bath Layout (Green Score: " + greenScore + ")", highlightStyle);
 		GUI.Label(rectItemLabel, "Layout Items", highlightStyle);
-		GUI.Label(rectGreenLabel, "Green Score: " + greenScore, highlightStyle);
 
         DrawItems();
     }
