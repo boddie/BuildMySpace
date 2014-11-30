@@ -19,8 +19,18 @@ public class SceneController : MonoBehaviour
             Instance = this;
         DontDestroyOnLoad(this);
 
-        Username = string.Empty;
-        Email = string.Empty;
+        if (PlayerPrefs.HasKey("username"))
+        {
+            Username = PlayerPrefs.GetString("username");
+            Email = PlayerPrefs.GetString("email");
+            Password = PlayerPrefs.GetString("password");
+        }
+        else
+        {
+            Username = string.Empty;
+            Email = string.Empty;
+            Password = string.Empty;
+        }
 
         ItemList = new Dictionary<string, Item>();
         Favorites = new List<string>();

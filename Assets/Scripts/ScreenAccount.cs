@@ -184,70 +184,73 @@ public class ScreenAccount : MonoBehaviour
     {
         GUI.Label(rectLayoutLabel, "Layouts", highlightStyle);
 
-        GUI.DrawTexture(new Rect(0, 0, 0, 0), singleBasic);
+        // Single basic
+        GUI.DrawTexture(new Rect(unit_w, unit_h * 4, unit_w * 2, unit_h * 3), singleBasic);
         Vector2 labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
-        GUI.Label(new Rect(0, 0, labelSize.x, labelSize.y), "Single Basic", labelStyle);
-        Rect editRect = new Rect(0, 0, 0, 0);
+        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 4, labelSize.x, labelSize.y), "Single Basic", labelStyle);
+        Rect editRect = new Rect(unit_w * 3.5f, unit_h * 5.5f, unit_w * 1f, unit_h);
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
         {
-
+            Application.LoadLevel("singleBasic");
         }
-        Rect facebookRect = new Rect(0, 0, 0, 0);
+        Rect facebookRect = new Rect(unit_w * 5, unit_h * 5.5f, unit_w * 0.5f, unit_h);
         GUI.DrawTexture(facebookRect, facebookButton);
         if (GUI.Button(facebookRect, "", "Label"))
         {
-
+            Application.ExternalEval("window.open('https://www.facebook.com/','_blank')");
         }
-        Rect twitterRect = new Rect(0, 0, 0, 0);
+        Rect twitterRect = new Rect(unit_w * 5.6f, unit_h * 5.5f, unit_w * 0.5f, unit_h);
         GUI.DrawTexture(twitterRect, twitterButton);
         if (GUI.Button(twitterRect, "", "Label"))
         {
-
+            Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
         }
 
-        GUI.DrawTexture(new Rect(0, 0, 0, 0), singleBasic);
-        labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
-        GUI.Label(new Rect(0, 0, labelSize.x, labelSize.y), "Single Basic", labelStyle);
-        editRect = new Rect(0, 0, 0, 0);
+        // Dual basic
+        GUI.DrawTexture(new Rect(unit_w, unit_h * 8, unit_w * 2, unit_h * 3), doubleBasic);
+        labelSize = labelStyle.CalcSize(new GUIContent("Double Basic"));
+        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 8, labelSize.x, labelSize.y), "Double Basic", labelStyle);
+        editRect = new Rect(unit_w * 3.5f, unit_h * 9.5f, unit_w * 1f, unit_h);
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
         {
-
+            Application.LoadLevel("doubleBasic");
         }
-        facebookRect = new Rect(0, 0, 0, 0);
+        facebookRect = new Rect(unit_w * 5, unit_h * 9.5f, unit_w * 0.5f, unit_h);
         GUI.DrawTexture(facebookRect, facebookButton);
         if (GUI.Button(facebookRect, "", "Label"))
         {
-
+            Application.ExternalEval("window.open('https://www.facebook.com/','_blank')");
         }
-        twitterRect = new Rect(0, 0, 0, 0);
+        twitterRect = new Rect(unit_w * 5.6f, unit_h * 9.5f, unit_w * 0.5f, unit_h);
         GUI.DrawTexture(twitterRect, twitterButton);
         if (GUI.Button(twitterRect, "", "Label"))
         {
-
+            Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
         }
 
-        GUI.DrawTexture(new Rect(0, 0, 0, 0), singleBasic);
-        labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
-        GUI.Label(new Rect(0, 0, labelSize.x, labelSize.y), "Single Basic", labelStyle);
-        editRect = new Rect(0, 0, 0, 0);
+        // Single bath
+        GUI.DrawTexture(new Rect(unit_w, unit_h * 12, unit_w * 2, unit_h * 3), singleBath);
+        labelSize = labelStyle.CalcSize(new GUIContent("Single Bath"));
+        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 12, labelSize.x, labelSize.y), "Single Bath", labelStyle);
+        editRect = new Rect(unit_w * 3.5f, unit_h * 13.5f, unit_w * 1f, unit_h);
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
         {
-
+            Application.LoadLevel("singleBath");
         }
-        facebookRect = new Rect(0, 0, 0, 0);
+        facebookRect = new Rect(unit_w * 5, unit_h * 13.5f, unit_w * 0.5f, unit_h);
         GUI.DrawTexture(facebookRect, facebookButton);
         if (GUI.Button(facebookRect, "", "Label"))
         {
-
+            Application.ExternalEval("window.open('https://www.facebook.com/','_blank')");
         }
-        twitterRect = new Rect(0, 0, 0, 0);
+        twitterRect = new Rect(unit_w * 5.6f, unit_h * 13.5f, unit_w * 0.5f, unit_h);
         GUI.DrawTexture(twitterRect, twitterButton);
         if (GUI.Button(twitterRect, "", "Label"))
         {
-
+            Application.ExternalEval("window.open('https://www.twitter.com/','_blank')");
         }
     }
 }

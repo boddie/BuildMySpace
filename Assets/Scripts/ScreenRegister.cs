@@ -134,6 +134,9 @@ public class ScreenRegister : MonoBehaviour
                 password != string.Empty &&
                 password == repassword)
             {
+                PlayerPrefs.SetString("username", username);
+                PlayerPrefs.SetString("email", email);
+                PlayerPrefs.SetString("password", password);
                 Application.LoadLevel("signon");
             }
             else
