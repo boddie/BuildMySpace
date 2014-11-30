@@ -25,6 +25,11 @@ public class SceneController : MonoBehaviour
         ItemList = new Dictionary<string, Item>();
         Favorites = new List<string>();
         AddItems();
+
+		Favorites.Add ("Efficient Desk Lamp");
+		Favorites.Add ("Efficient Floor Lamp");
+		Favorites.Add ("Inefficient Laptop");
+		Favorites.Add ("Inefficient Printer");
     }
 
     private void AddItems()
