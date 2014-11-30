@@ -39,6 +39,7 @@ public class ScreenAccount : MonoBehaviour
 
     private GUIStyle labelStyle;
     private GUIStyle highlightStyle;
+    private GUIStyle scrollStyle;
 
     private string username;
     private string email;
@@ -78,6 +79,10 @@ public class ScreenAccount : MonoBehaviour
         labelStyle.fontSize = 25;
         labelStyle.normal.textColor = Color.black;
 
+        scrollStyle = new GUIStyle();
+        scrollStyle.fontSize = 20;
+        scrollStyle.normal.textColor = Color.black;
+
         username = SceneController.Instance.Username;
         email = SceneController.Instance.Email;
     }
@@ -112,6 +117,7 @@ public class ScreenAccount : MonoBehaviour
 
     private void OnGUI()
     {
+        Debug.Log(Screen.width + ", " + Screen.height);
         GUI.DrawTexture(rectStrip, stripColor);
         GUI.DrawTexture(rectBMSLogo, logoBMS);
         GUI.DrawTexture(rectSignOut, signOutButton);
@@ -165,7 +171,7 @@ public class ScreenAccount : MonoBehaviour
 		float currentYPos = rectFavoritesInnerYPos;
 
 		// Buffered height/width for favorite item
-		Vector2 favoriteStyle = labelStyle.CalcSize (new GUIContent (SceneController.Instance.Favorites [0]));
+		Vector2 favoriteStyle = scrollStyle.CalcSize (new GUIContent (SceneController.Instance.Favorites [0]));
 		float favoriteHeight = favoriteStyle.y + yBuffer;
 		float favoriteWidth = favoriteStyle.x + (xBuffer * 2);
 		
@@ -182,9 +188,9 @@ public class ScreenAccount : MonoBehaviour
 
 		Rect rectFavoritesInner = new Rect (rectFavoritesInnerXPos, rectFavoritesInnerYPos, (imageWidth + xBuffer + logoWidth + xBuffer + favoriteWidth + xBuffer + ((buttonWidth + xBuffer) * 2) + (buttonWidth * 2 + xBuffer) + (buttonWidth * 2.2f + xBuffer)), (favoriteHeight + yBuffer) * numFavorites);
 		Rect rectFavorites = new Rect (rectFavoritesXPos, rectFavoritesYPos, rectFavoritesInner.width, rectFavoritesInner.height + yBuffer);
-		GUI.DrawTexture (rectFavorites, background);
+        GUI.DrawTexture(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8, rectFavorites.height + 20)), background);
 
-		favoriteScrollPos = GUI.BeginScrollView(rectFavorites, favoriteScrollPos, rectFavoritesInner);
+        favoriteScrollPos = GUI.BeginScrollView(new Rect(unit_w * 9, unit_h * 7, unit_w * 6, Mathf.Min(unit_h * 8, rectFavorites.height + 20)), favoriteScrollPos, rectFavoritesInner);
 		
 		Rect buttonRect = new Rect (0, 0, 0, 0);
 
@@ -201,7 +207,7 @@ public class ScreenAccount : MonoBehaviour
 			GUI.DrawTexture(new Rect(currentXPos, currentYPos + yBuffer, imageWidth, imageHeight), SceneController.Instance.ItemList[fav].EfficiencyImage);
 			currentXPos = currentXPos + imageWidth + xBuffer;
 
-			GUI.Label(new Rect(currentXPos, currentYPos + yBuffer, favoriteWidth, favoriteHeight), fav, labelStyle);
+			GUI.Label(new Rect(currentXPos, currentYPos + yBuffer, favoriteWidth, favoriteHeight), fav, scrollStyle);
 			currentXPos = currentXPos + favoriteWidth;
 
 			rectPurchase = new Rect(currentXPos, currentYPos + yBuffer, buttonWidth * 2.2f, buttonHeight);
