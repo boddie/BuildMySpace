@@ -8,6 +8,9 @@ public class SceneController : MonoBehaviour
     public string Username { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+    public int SingleBasicScore { get; set; }
+    public int SingleBathScore { get; set; }
+    public int DoubleBasicScore { get; set; }
     public Dictionary<string, Item> ItemList;
     public List<string> Favorites;
 
@@ -39,10 +42,9 @@ public class SceneController : MonoBehaviour
         Favorites = new List<string>();
         AddItems();
 
-		//Favorites.Add ("Efficient Desk Lamp");
-		//Favorites.Add ("Efficient Floor Lamp");
-		//Favorites.Add ("Inefficient Laptop");
-		//Favorites.Add ("Inefficient Printer");
+        SingleBasicScore = 0;
+        SingleBathScore = 0;
+        DoubleBasicScore = 0;
     }
 
     private void AddItems()

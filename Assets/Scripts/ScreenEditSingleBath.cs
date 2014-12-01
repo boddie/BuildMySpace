@@ -8,6 +8,7 @@ public class ScreenEditSingleBath : MonoBehaviour
     public GameObject TopView;
     public GameObject SideView;
     public GameObject InnerCamera;
+    public GUISkin FieldSkin;
 
     private const float DIVISOR = 16;
 
@@ -35,11 +36,14 @@ public class ScreenEditSingleBath : MonoBehaviour
     private Rect rectBackButton;
     private Rect rectSideView;
 	private Rect rectTopView;
+    private Rect rectFilter;
 	
 	private Vector2 scrollPos = Vector2.zero;
 
     private GUIStyle labelStyle;
     private GUIStyle highlightStyle;
+
+    private string filter = "Filter";
 
     #endregion
 
@@ -91,6 +95,10 @@ public class ScreenEditSingleBath : MonoBehaviour
 
         labelSize = highlightStyle.CalcSize(new GUIContent("Layout Items"));
 		rectItemLabel = new Rect(unit_w * 9, unit_h * 2.5f, labelSize.x, labelSize.y);
+
+        rectFilter = new Rect(unit_w * 10 + rectItemLabel.width, unit_h * 2.5f, unit_w * 5 - rectItemLabel.width, unit_h);
+
+        SceneController.Instance.SingleBathScore = greenScore;
     }
 
     private void OnGUI()
@@ -127,6 +135,11 @@ public class ScreenEditSingleBath : MonoBehaviour
         GUI.Label(rectLayoutLabel, "Single Bath Layout (Green Score: " + greenScore + ")", highlightStyle);
 		GUI.Label(rectItemLabel, "Layout Items", highlightStyle);
 
+        GUISkin cur = GUI.skin;
+        GUI.skin = FieldSkin;
+        filter = GUI.TextField(rectFilter, filter);
+        GUI.skin = cur;
+
         DrawItems();
     }
 
@@ -147,43 +160,48 @@ public class ScreenEditSingleBath : MonoBehaviour
 
 		foreach (var item in SceneController.Instance.ItemList)
 		{
-			Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
-			
-			Rect rectLogo = new Rect(xBuffer, currentYPos, unit_w * screenRatio, unit_h);
-			GUI.DrawTexture(rectLogo, item.Value.Logo);
-			
-			Rect rectEfficiencyImage = new Rect(rectLogo.xMax + xBuffer, currentYPos, unit_w * screenRatio, unit_h);
-			GUI.DrawTexture(rectEfficiencyImage, item.Value.EfficiencyImage);
-			
-			Rect rectAdd = new Rect(rectEfficiencyImage.xMax + xBuffer, currentYPos, unit_w, unit_h);
-			Rect rectFavorite = new Rect(rectAdd.xMax + xBuffer, currentYPos, unit_w, unit_h);
-			
-			Rect rectLabel = new Rect(rectFavorite.xMax + xBuffer, currentYPos + (unit_h - size.y)/2.0f, size.x, unit_h);
-			GUI.Label(rectLabel, item.Key, labelStyle);
-
-			GUI.DrawTexture(rectAdd, addButton);
-			if (GUI.Button(rectAdd, "", "Label"))
-			{
-				GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity);
-				if(item.Value.EfficiencyImage == Resources.Load<Texture2D>("Textures/efficient")) {
-					greenScore += 5;
-				} else greenScore -= 5;
-			}
-			
-			GUI.DrawTexture(rectFavorite, favoriteButton);
-			if (GUI.Button(rectFavorite, "", "Label"))
-			{
-				if (!SceneController.Instance.Favorites.Contains(item.Key))
-				{
-					SceneController.Instance.Favorites.Add(item.Key);
-				}
-			}
-			
-			currentYPos = currentYPos + unit_h + yBuffer;
-            float current_w = rectLogo.width + rectEfficiencyImage.width + rectAdd.width + rectFavorite.width + rectLabel.width;
-            if (current_w > max_w)
+            if (filter == string.Empty || filter == "Filter" || item.Key.ToUpper().Contains(filter.ToUpper()))
             {
-                max_w = current_w;
+                Vector2 size = labelStyle.CalcSize(new GUIContent(item.Key));
+
+                Rect rectLogo = new Rect(xBuffer, currentYPos, unit_w * screenRatio, unit_h);
+                GUI.DrawTexture(rectLogo, item.Value.Logo);
+
+                Rect rectEfficiencyImage = new Rect(rectLogo.xMax + xBuffer, currentYPos, unit_w * screenRatio, unit_h);
+                GUI.DrawTexture(rectEfficiencyImage, item.Value.EfficiencyImage);
+
+                Rect rectAdd = new Rect(rectEfficiencyImage.xMax + xBuffer, currentYPos, unit_w, unit_h);
+                Rect rectFavorite = new Rect(rectAdd.xMax + xBuffer, currentYPos, unit_w, unit_h);
+
+                Rect rectLabel = new Rect(rectFavorite.xMax + xBuffer, currentYPos + (unit_h - size.y) / 2.0f, size.x, unit_h);
+                GUI.Label(rectLabel, item.Key, labelStyle);
+
+                GUI.DrawTexture(rectAdd, addButton);
+                if (GUI.Button(rectAdd, "", "Label"))
+                {
+                    GameObject.Instantiate(Resources.Load<GameObject>(item.Value.Prefab), new Vector3(0, 2, 0), Quaternion.identity);
+                    if (item.Value.EfficiencyImage == Resources.Load<Texture2D>("Textures/efficient"))
+                    {
+                        greenScore += 5;
+                    }
+                    else greenScore -= 5;
+                }
+
+                GUI.DrawTexture(rectFavorite, favoriteButton);
+                if (GUI.Button(rectFavorite, "", "Label"))
+                {
+                    if (!SceneController.Instance.Favorites.Contains(item.Key))
+                    {
+                        SceneController.Instance.Favorites.Add(item.Key);
+                    }
+                }
+
+                currentYPos = currentYPos + unit_h + yBuffer;
+                float current_w = rectLogo.width + rectEfficiencyImage.width + rectAdd.width + rectFavorite.width + rectLabel.width;
+                if (current_w > max_w)
+                {
+                    max_w = current_w;
+                }
             }
 		}
 		GUI.EndScrollView();

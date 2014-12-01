@@ -255,8 +255,8 @@ public class ScreenAccount : MonoBehaviour
 
         // Single basic
         GUI.DrawTexture(new Rect(unit_w, unit_h * 4, unit_w * 2, unit_h * 3), singleBasic);
-        Vector2 labelSize = labelStyle.CalcSize(new GUIContent("Single Basic"));
-        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 4, labelSize.x, labelSize.y), "Single Basic", labelStyle);
+        Vector2 labelSize = labelStyle.CalcSize(new GUIContent("Single Basic (Green Score: " + SceneController.Instance.SingleBasicScore + ")"));
+        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 4, labelSize.x, labelSize.y), "Single Basic (Green Score: " + SceneController.Instance.SingleBasicScore + ")", labelStyle);
         Rect editRect = new Rect(unit_w * 3.5f, unit_h * 5.5f, unit_w * 1f, unit_h);
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
@@ -279,8 +279,8 @@ public class ScreenAccount : MonoBehaviour
 
         // Dual basic
         GUI.DrawTexture(new Rect(unit_w, unit_h * 8, unit_w * 2, unit_h * 3), doubleBasic);
-        labelSize = labelStyle.CalcSize(new GUIContent("Double Basic"));
-        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 8, labelSize.x, labelSize.y), "Double Basic", labelStyle);
+        labelSize = labelStyle.CalcSize(new GUIContent("Double Basic (Green Score: " + SceneController.Instance.DoubleBasicScore + ")"));
+        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 8, labelSize.x, labelSize.y), "Double Basic (Green Score: " + SceneController.Instance.DoubleBasicScore + ")", labelStyle);
         editRect = new Rect(unit_w * 3.5f, unit_h * 9.5f, unit_w * 1f, unit_h);
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
@@ -303,8 +303,8 @@ public class ScreenAccount : MonoBehaviour
 
         // Single bath
         GUI.DrawTexture(new Rect(unit_w, unit_h * 12, unit_w * 2, unit_h * 3), singleBath);
-        labelSize = labelStyle.CalcSize(new GUIContent("Single Bath"));
-        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 12, labelSize.x, labelSize.y), "Single Bath", labelStyle);
+        labelSize = labelStyle.CalcSize(new GUIContent("Single Bath (Green Score: " + SceneController.Instance.SingleBathScore + ")"));
+        GUI.Label(new Rect(unit_w * 3.5f, unit_h * 12, labelSize.x, labelSize.y), "Single Bath (Green Score: " + SceneController.Instance.SingleBathScore + ")", labelStyle);
         editRect = new Rect(unit_w * 3.5f, unit_h * 13.5f, unit_w * 1f, unit_h);
         GUI.DrawTexture(editRect, editButton);
         if (GUI.Button(editRect, "", "Label"))
